@@ -1,0 +1,5 @@
+name: HttpEndpoints
+version: '${version}'
+main: net.nonverse.labs.minecraft.httpendpoints.HttpEndpoints
+api-version: '1.20'
+load: STARTUP
