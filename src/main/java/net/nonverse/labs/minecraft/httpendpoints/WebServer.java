@@ -17,7 +17,7 @@ public class WebServer {
     public WebServer(FileConfiguration bukkitConfig, Logger log) {
         this.port = bukkitConfig.getInt("port");
         this.log = log;
-        
+
         this.javalin = Javalin.create(config -> configureJavalin(config));
     }
 
@@ -26,9 +26,14 @@ public class WebServer {
         config.showJavalinBanner = false;
     }
 
+    public void middleware(String route, Handler handler) {
+        this.javalin.before(route, handler);
+    }
+
     public void get(String route, Handler handler) {
         this.javalin.addHttpHandler(HandlerType.GET, route, handler);
     }
+
     public void post(String route, Handler handler) {
         this.javalin.addHttpHandler(HandlerType.POST, route, handler);
     }

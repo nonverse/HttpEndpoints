@@ -21,6 +21,8 @@ public final class HttpEndpoints extends JavaPlugin {
         WebServer server = new WebServer(bukkitConfig, log);
         server.start();
         Routes.registerRoutes(server, log);
+        Middlewares.registerMiddlewares(server, log, this);
+
     }
 
     @Override

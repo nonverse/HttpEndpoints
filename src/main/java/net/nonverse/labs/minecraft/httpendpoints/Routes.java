@@ -10,5 +10,6 @@ public final class Routes {
         ApiInitializer api = new ApiInitializer();
 
         // Register routes here
+        server.get("player/message", api.chatApi()::sendMessage);
     }
 }
