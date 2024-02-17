@@ -16,17 +16,25 @@ public final class HttpEndpoints extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
 
-        FileConfiguration bukkitConfig = getConfig();
-
-        WebServer server = new WebServer(bukkitConfig, log);
-        server.start();
-        Routes.registerRoutes(server, log);
-        Middlewares.registerMiddlewares(server, log, this);
-
+        startWebServer(getConfig());
     }
 
     @Override
     public void onDisable() {
         server.stop();
+    }
+
+    /**
+     * Start the webserver and configure all routes and middlewares
+     *
+     * @param bukkitConfig
+     */
+    private void startWebServer(FileConfiguration bukkitConfig) {
+        WebServer server = new WebServer(bukkitConfig, log);
+
+        server.start();
+
+        Routes.registerRoutes(server, log);
+        Middlewares.registerMiddlewares(server, log, this);
     }
 }

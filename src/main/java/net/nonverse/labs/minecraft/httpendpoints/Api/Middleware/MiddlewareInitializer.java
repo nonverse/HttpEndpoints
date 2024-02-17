@@ -6,6 +6,7 @@ public class MiddlewareInitializer {
     private final Auth authMiddleware;
 
     public MiddlewareInitializer(Plugin plugin) {
+        // Instantiate middleware handlers
         this.authMiddleware = new Auth(plugin);
     }
 

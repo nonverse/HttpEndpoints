@@ -12,6 +12,15 @@ import java.util.Base64;
 
 public class Crypt {
 
+    /**
+     * Load RSAPublicKey from .key or .pem file
+     *
+     * @param keyFile
+     * @return
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeySpecException
+     */
     public static RSAPublicKey loadRsaKey(File keyFile) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         String key = new String(Files.readAllBytes(keyFile.toPath()));
         key = key

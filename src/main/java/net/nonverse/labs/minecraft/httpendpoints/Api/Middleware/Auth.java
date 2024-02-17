@@ -34,8 +34,8 @@ public class Auth {
 
             Algorithm algorithm = Algorithm.RSA256(pubKey);
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer("https://api.nonverse.test/")
-                    .withAudience("https://mc.labs.nonverse.test/")
+                    .withIssuer(plugin.getConfig().getString("api"))
+                    .withAudience(plugin.getConfig().getString("host"))
                     .withClaim("ttp", "api:xs")
                     .build();
 
