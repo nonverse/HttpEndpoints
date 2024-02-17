@@ -1,16 +1,16 @@
 package net.nonverse.labs.minecraft.httpendpoints.Api.Middleware;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.JWTVerifier;
 import io.javalin.http.Context;
 import io.javalin.http.UnauthorizedResponse;
 import net.nonverse.labs.minecraft.httpendpoints.helpers.Crypt;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPublicKey;
-import java.security.spec.InvalidKeySpecException;
 
 public class Auth {
 
@@ -20,15 +20,30 @@ public class Auth {
         this.plugin = plugin;
     }
 
-    public void jwt(Context ctx) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+    public void jwt(Context ctx) {
         String tokenHeader = ctx.header("Authorization");
         if (tokenHeader == null) {
-            throw new UnauthorizedResponse("No Token");
+            throw new UnauthorizedResponse();
         }
 
-        String token = tokenHeader.replace("Bearer", "");
+        String token = tokenHeader.replace("Bearer ", "");
         DecodedJWT decodedToken;
 
-        RSAPublicKey pubKey = Crypt.loadRsaKey(new File(plugin.getDataFolder(), "xs-public.key"));
+        try {
+            RSAPublicKey pubKey = Crypt.loadRsaKey(new File(plugin.getDataFolder(), "xs-public.key"));
+
+            Algorithm algorithm = Algorithm.RSA256(pubKey);
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("https://api.nonverse.test/")
+                    .withAudience("https://mc.labs.nonverse.test/")
+                    .withClaim("ttp", "api:xs")
+                    .build();
+
+            decodedToken = verifier.verify(token);
+            ctx.attribute("uuid", decodedToken.getSubject());
+
+        } catch (Exception e) {
+            throw new UnauthorizedResponse();
+        }
     }
 }
