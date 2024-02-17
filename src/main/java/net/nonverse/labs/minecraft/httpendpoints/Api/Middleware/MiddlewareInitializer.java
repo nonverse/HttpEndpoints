@@ -1,6 +1,5 @@
 package net.nonverse.labs.minecraft.httpendpoints.Api.Middleware;
 
-import io.javalin.http.Context;
 import org.bukkit.plugin.Plugin;
 
 public class MiddlewareInitializer {
