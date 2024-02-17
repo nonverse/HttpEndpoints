@@ -1,1 +1,4 @@
+host: https://mc.labs.nonverse.test/
 port: 8080
+
+api: https://api.nonverse.test/
