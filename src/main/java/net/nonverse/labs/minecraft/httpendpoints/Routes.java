@@ -15,6 +15,6 @@ public final class Routes {
         server.post("player/message", api.chatApi()::sendMessage);
 
         // Player World
-        server.post("player/world/{id}", api.playerWorldApi()::createWorld);
+        server.post("player/world/{id}", api.worldApi()::createWorld);
     }
 }

@@ -4,15 +4,14 @@ import io.javalin.http.Context;
 import net.kyori.adventure.text.Component;
 import net.nonverse.labs.minecraft.httpendpoints.Entities.Player;
 import net.nonverse.labs.minecraft.httpendpoints.WorldManager;
-import org.bukkit.WorldCreator;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class PlayerWorldApi {
+public class WorldApi {
     private final WorldManager manager;
 
-    public PlayerWorldApi() {
+    public WorldApi() {
         this.manager = new WorldManager();
     }
 
