@@ -20,11 +20,8 @@ public class ChatApi {
     public void sendMessage(@NotNull Context ctx) {
         try {
             Component message = Component.text(Objects.requireNonNull(ctx.formParam("message")));
-            Player user = Objects.requireNonNull(ctx.attribute("user"));
+            Player player = Objects.requireNonNull(ctx.attribute("user"));
 
-            Audience player = Bukkit.getPlayer(user.getUniqueId());
-
-            assert player != null;
             player.sendMessage(message);
         } catch (NullPointerException nullPointerException) {
             throw new UnprocessableContentResponse();
