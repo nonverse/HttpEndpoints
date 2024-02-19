@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class ChatApi {
 
@@ -20,7 +21,7 @@ public class ChatApi {
         try {
             Component message = Component.text(Objects.requireNonNull(ctx.formParam("message")));
 
-            Audience player = Bukkit.getPlayer((String) Objects.requireNonNull(ctx.attribute("uuid")));
+            Audience player = Bukkit.getPlayer(Objects.requireNonNull((UUID) ctx.attribute("uuid")).toString());
 
             assert player != null;
             player.sendMessage(message);

@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.security.interfaces.RSAPublicKey;
+import java.util.UUID;
 
 public class Auth {
 
@@ -40,7 +41,7 @@ public class Auth {
                     .build();
 
             decodedToken = verifier.verify(token);
-            ctx.attribute("uuid", decodedToken.getSubject());
+            ctx.attribute("uuid", UUID.fromString(decodedToken.getSubject()));
 
         } catch (Exception e) {
             throw new UnauthorizedResponse();
