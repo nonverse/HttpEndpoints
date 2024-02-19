@@ -4,11 +4,11 @@ import io.javalin.http.Context;
 import io.javalin.http.UnprocessableContentResponse;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.nonverse.labs.minecraft.httpendpoints.Entities.Player;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class ChatApi {
 
@@ -20,8 +20,9 @@ public class ChatApi {
     public void sendMessage(@NotNull Context ctx) {
         try {
             Component message = Component.text(Objects.requireNonNull(ctx.formParam("message")));
+            Player user = Objects.requireNonNull(ctx.attribute("user"));
 
-            Audience player = Bukkit.getPlayer(Objects.requireNonNull((UUID) ctx.attribute("uuid")).toString());
+            Audience player = Bukkit.getPlayer(user.getUniqueId());
 
             assert player != null;
             player.sendMessage(message);
