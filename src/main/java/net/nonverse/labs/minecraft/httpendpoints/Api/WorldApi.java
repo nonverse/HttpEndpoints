@@ -1,36 +1,32 @@
 package net.nonverse.labs.minecraft.httpendpoints.Api;
 
-import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import io.javalin.http.Context;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.node.types.PermissionNode;
+import net.kyori.adventure.text.Component;
+import net.nonverse.labs.minecraft.httpendpoints.Entities.Player;
 import net.nonverse.labs.minecraft.httpendpoints.WorldManager;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 public class WorldApi {
     private final WorldManager manager;
-    private final RegisteredServiceProvider<LuckPerms> luckperms;
 
     public WorldApi() {
         this.manager = new WorldManager();
-        this.luckperms = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
     }
 
     public void createWorld(@NotNull Context ctx) {
-        LuckPerms luckpermsApi = this.luckperms.getProvider();
+        Player player = Objects.requireNonNull(ctx.attribute("user"));
+        String worldName = ctx.pathParamAsClass("id", String.class).get();
 
-        String worldName = ctx.pathParamAsClass("world_id", String.class).get();
+        this.manager.createNewWorld(worldName)
+                .thenAccept(world -> {
+                    player.addPermission("multiverse.access." + world.getName())
+                            .thenAccept(permission -> {
+                                player.sendMessage(Component.text("World created"));
+                                // TODO Inform API that world is ready to play on
+                            });
+                });
 
-        CompletableFuture<MultiverseWorld> world = this.manager.createNewWorld(worldName);
-
-        // TODO Add to thenAccept() of world
-        luckpermsApi.getUserManager().modifyUser(Objects.requireNonNull(ctx.attribute("uuid")), user -> {
-            user.data().add(PermissionNode.builder("multiverse.access." + worldName).build());
-        });
     }
 }

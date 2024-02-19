@@ -10,6 +10,13 @@ public final class Routes {
         ApiInitializer api = new ApiInitializer();
 
         // Register routes here
+
+        // Player
         server.post("player/message", api.chatApi()::sendMessage);
+
+        // World
+        server.post("world/{id}", api.worldApi()::createWorld);
     }
+
+
 }
