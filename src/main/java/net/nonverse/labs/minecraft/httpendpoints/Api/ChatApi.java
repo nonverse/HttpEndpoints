@@ -18,8 +18,7 @@ public class ChatApi {
      */
     public void sendMessage(@NotNull Context ctx) {
         try {
-            Component message = Component.text(Objects.requireNonNull(ctx.queryParam("message")));
-            // TODO using queryParam() only for testing. Should use formParam()
+            Component message = Component.text(Objects.requireNonNull(ctx.formParam("message")));
 
             Audience player = Bukkit.getPlayer((String) Objects.requireNonNull(ctx.attribute("uuid")));
 
