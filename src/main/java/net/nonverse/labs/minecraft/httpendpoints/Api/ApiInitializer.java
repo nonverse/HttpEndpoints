@@ -3,19 +3,19 @@ package net.nonverse.labs.minecraft.httpendpoints.Api;
 public class ApiInitializer {
 
     private final ChatApi chatApi;
-    private final WorldApi worldApi;
+    private final PlayerWorldApi worldApi;
 
     public ApiInitializer() {
         // Instantiate api handlers
         this.chatApi = new ChatApi();
-        this.worldApi = new WorldApi();
+        this.worldApi = new PlayerWorldApi();
     }
 
     public ChatApi chatApi() {
         return this.chatApi;
     }
 
-    public WorldApi worldApi() {
+    public PlayerWorldApi playerWorldApi() {
         return this.worldApi;
     }
 }
