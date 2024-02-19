@@ -11,12 +11,14 @@ public final class HttpEndpoints extends JavaPlugin {
     private WebServer server;
 
     private static final Logger log = Bukkit.getLogger();
+    public static HttpEndpoints instance = null;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
 
         startWebServer(getConfig());
+        instance = this;
     }
 
     @Override
@@ -36,5 +38,9 @@ public final class HttpEndpoints extends JavaPlugin {
 
         Routes.registerRoutes(server, log);
         Middlewares.registerMiddlewares(server, log, this);
+    }
+
+    public static HttpEndpoints getInstance() {
+        return instance;
     }
 }

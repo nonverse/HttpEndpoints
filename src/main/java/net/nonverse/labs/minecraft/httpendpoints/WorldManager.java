@@ -1,27 +1,32 @@
 package net.nonverse.labs.minecraft.httpendpoints;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.onarandombox.MultiverseCore.api.MVWorldManager;
-import com.onarandombox.MultiverseCore.api.MultiverseWorld;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.WorldType;
+import org.bukkit.WorldCreator;
 
-import java.util.Objects;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 public class WorldManager {
 
-    private final MVWorldManager manager;
-
     public WorldManager() {
-        this.manager = ((MultiverseCore) Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("Multiverse-Core"))).getMVWorldManager();
+        //
     }
 
-    public CompletableFuture<MultiverseWorld> createNewWorld(String name) {
-        return CompletableFuture.supplyAsync(() -> {
-            this.manager.addWorld(name, World.Environment.NORMAL, null, WorldType.NORMAL, true, null);
-            return this.manager.getMVWorld(name);
+    public CompletableFuture<Void> createNewWorld(String name) {
+        String worldContainer = Bukkit.getWorldContainer().getPath();
+
+        return CompletableFuture.runAsync(() -> {
+            try {
+                FileUtils.copyDirectory(new File(worldContainer + "/world_template"), new File(worldContainer + "/" + name));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
+    }
+
+    public void loadWorld(String name) {
+        new WorldCreator(name).createWorld();
     }
 }

@@ -22,7 +22,7 @@ public class PlayerWorldApi {
 
         manager.createNewWorld(worldName)
                 .thenRun(() -> {
-                    new WorldCreator(worldName).createWorld();
+                    manager.loadWorld(worldName); // TODO IDK if we need to load the world right away
                     player.addPermission("multiverse.access." + worldName)
                             .thenAccept(permission -> {
                                 player.sendMessage(Component.text("World created"));
