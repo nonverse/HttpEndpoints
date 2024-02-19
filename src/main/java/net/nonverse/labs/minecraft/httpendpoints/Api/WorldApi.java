@@ -17,7 +17,7 @@ public class WorldApi {
 
     public void createWorld(@NotNull Context ctx) {
         Player player = Objects.requireNonNull(ctx.attribute("user"));
-        String worldName = ctx.pathParamAsClass("id", String.class).get();
+        String worldName = player.getUniqueId().toString();
 
         manager.createNewWorld(worldName)
                 .thenRun(() -> {
