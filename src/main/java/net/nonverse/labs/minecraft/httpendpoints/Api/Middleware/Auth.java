@@ -61,7 +61,7 @@ public class Auth {
         DecodedJWT decodedToken;
 
         try {
-            RSAPublicKey pubKey = Crypt.loadRsaKey(new File(plugin.getDataFolder(), "xs-public.key"));
+            RSAPublicKey pubKey = Crypt.loadRsaKey(new File(plugin.getDataFolder(), "labs:mc:xs-public.key"));
 
             Algorithm algorithm = Algorithm.RSA256(pubKey);
             JWTVerifier verifier = JWT.require(algorithm)
