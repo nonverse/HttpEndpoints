@@ -21,7 +21,7 @@ public class WorldApi {
 
         manager.createWorld(worldName)
                 .thenRun(() -> {
-                    manager.loadWorld(worldName); // TODO IDK if we need to load the world right away
+                    manager.loadWorld(player.getUniqueId().toString()); // TODO IDK if we need to load the world right away
                     player.sendMessage(Component.text("World Created"));
                 });
     }
