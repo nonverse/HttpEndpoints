@@ -67,7 +67,7 @@ public class Auth {
             JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer(plugin.getConfig().getString("api"))
                     .withAudience(plugin.getConfig().getString("host"))
-                    .withClaim("ttp", "api:xs")
+                    .withClaim("ttp", "labs:mc:xs")
                     .build();
 
             return verifier.verify(token);
