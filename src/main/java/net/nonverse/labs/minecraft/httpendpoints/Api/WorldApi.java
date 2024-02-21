@@ -19,14 +19,10 @@ public class WorldApi {
         Player player = Objects.requireNonNull(ctx.attribute("user"));
         String worldName = player.getUniqueId().toString();
 
-        manager.createNewWorld(worldName)
+        manager.createWorld(worldName)
                 .thenRun(() -> {
                     manager.loadWorld(worldName); // TODO IDK if we need to load the world right away
-                    player.addPermission("multiverse.access." + worldName)
-                            .thenAccept(permission -> {
-                                player.sendMessage(Component.text("World created"));
-                                // TODO Inform API that world is ready to play on
-                            });
+                    player.sendMessage(Component.text("World Created"));
                 });
     }
 }
