@@ -5,13 +5,15 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import io.javalin.http.Context;
+import io.javalin.http.ForbiddenResponse;
 import io.javalin.http.UnauthorizedResponse;
-import net.nonverse.labs.minecraft.httpendpoints.Entities.Player;
 import net.nonverse.labs.minecraft.httpendpoints.helpers.Crypt;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.security.interfaces.RSAPublicKey;
+import java.util.UUID;
 
 public class Auth {
 
@@ -22,6 +24,34 @@ public class Auth {
     }
 
     public void jwt(Context ctx) {
+        this.validateJwt(ctx);
+    }
+
+    public void user(Context ctx) {
+        DecodedJWT decodedJWT = this.validateJwt(ctx);
+
+        if (decodedJWT.getSubject().isEmpty()) {
+            throw new ForbiddenResponse("No user present in request");
+        }
+
+        ctx.attribute("user", Bukkit.getOfflinePlayer(UUID.fromString(decodedJWT.getSubject())).isOnline() ? Bukkit.getPlayer(UUID.fromString(decodedJWT.getSubject())) : Bukkit.getOfflinePlayer(UUID.fromString(decodedJWT.getSubject())));
+    }
+
+    public void online(Context ctx) {
+        DecodedJWT decodedJWT = this.validateJwt(ctx);
+
+        if (decodedJWT.getSubject().isEmpty()) {
+            throw new ForbiddenResponse("No user present in request");
+        }
+
+        if (!Bukkit.getOfflinePlayer(UUID.fromString(decodedJWT.getSubject())).isOnline()) {
+            throw new ForbiddenResponse("Player is not online");
+        }
+
+        ctx.attribute("user", Bukkit.getPlayer(UUID.fromString(decodedJWT.getSubject())));
+    }
+
+    private DecodedJWT validateJwt(Context ctx) {
         String tokenHeader = ctx.header("Authorization");
         if (tokenHeader == null) {
             throw new UnauthorizedResponse();
@@ -40,8 +70,7 @@ public class Auth {
                     .withClaim("ttp", "api:xs")
                     .build();
 
-            decodedToken = verifier.verify(token);
-            ctx.attribute("user", new Player(decodedToken.getSubject()));
+            return verifier.verify(token);
 
         } catch (Exception e) {
             throw new UnauthorizedResponse();

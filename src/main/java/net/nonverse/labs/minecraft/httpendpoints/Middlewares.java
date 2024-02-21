@@ -10,7 +10,13 @@ public final class Middlewares {
     public static void registerMiddlewares(WebServer server, Logger log, Plugin plugin) {
         MiddlewareInitializer middlewares = new MiddlewareInitializer(plugin);
 
-        // Register middlewares here
-        server.middleware("player/*", middlewares.auth()::jwt);
+        // Player message routes
+        server.middleware("player/message", middlewares.auth()::online);
+
+        // Player world routs
+        server.middleware("player/world/*", middlewares.auth()::user);
+
+        // Root
+        server.middleware("*", middlewares.auth()::jwt);
     }
 }
