@@ -65,7 +65,7 @@ public class Auth {
 
             Algorithm algorithm = Algorithm.RSA256(pubKey);
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer(plugin.getConfig().getString("api"))
+                    .withIssuer(plugin.getConfig().getString("xs-issuer"))
                     .withAudience(plugin.getConfig().getString("host"))
                     .withClaim("ttp", "labs:mc:xs")
                     .build();
